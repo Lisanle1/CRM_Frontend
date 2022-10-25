@@ -1,0 +1,25 @@
+.addleads-page{
+    position: relative;
+    width: calc(100% - 222px);
+    left: 222px;
+    padding: 0.5rem;
+    padding-top: 2.2rem;
+    overflow: auto;
+    transition: 0.5s
+}
+
+.form-group {
+    width: clamp(30rem, 30vw, 36rem);
+    
+}
+
+.addleads-submitbtn{
+    width: clamp(30rem, 30vw, 36rem);
+}
+
+@media (width <= 768px) {
+    .addleads-page{
+        width: calc(100% - 62px);
+        left: 62px;
+    }
+  }

@@ -1,0 +1,24 @@
+.leads-page{
+    position: relative;
+    width: calc(100% - 222px);
+    left: 222px;
+    overflow: auto;
+    transition: 0.5s;
+    padding-top:2.2rem;
+}
+
+.leadPage-hidebtn{
+    position: absolute;
+    right: 10px;
+    top: 0.5rem;
+    font-size:0.8em;
+    display: block;
+    z-index: 3;
+}
+
+@media (width <= 768px) {
+    .leads-page{
+        width: calc(100% - 62px);
+        left: 62px;
+    }
+  }

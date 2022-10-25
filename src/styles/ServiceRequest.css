@@ -1,0 +1,15 @@
+.request-page{
+    position: relative;
+    width: calc(100% - 222px);
+    left: 222px;
+    padding-top:2.2rem;
+    overflow: auto;
+    transition:0.5s
+}
+
+@media (width <= 768px) {
+    .request-page{
+        width: calc(100% - 62px);
+        left: 62px;
+    }
+  }
