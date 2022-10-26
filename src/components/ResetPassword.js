@@ -77,7 +77,7 @@ function ResetPassword() {
                 </Box>
                 <button type="submit" disabled={!isValid || disabled} className="btn mt-3" >Reset</button>
             </form><br />
-            {show ? <div>Sign in to your account: <Link to='/login'>Sign In</Link></div> : ""}
+            {show ? <div>Sign in to your account: <Link to='/'>Sign In</Link></div> : ""}
         </div>
     )
 }

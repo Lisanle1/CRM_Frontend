@@ -5,15 +5,17 @@ import { useFormik } from "formik";
 import "../styles/AddLeads.css";
 import { ErrorMessage } from "./Utils"
 import axios from 'axios';
+import { API_URL } from "./API_URL"
 
-function AddLeads({ getDataFromDb}) {
+
+function AddLeads() {
     let refToken = useRef()                             //useRef hook to save token in locally
     const localToken = localStorage.getItem("token");   //getting token from localStorage
     refToken.current = localToken;                      //assigning token in refToken
 
    
     const onSubmit=async(values)=>{
-        await axios.post("http://localhost:3001/leads",{
+        await axios.post(`${API_URL}/leads`,{
                 name: values.name,
                 email: values.email,
                 contact: values.contact,
@@ -26,7 +28,6 @@ function AddLeads({ getDataFromDb}) {
             }   
     });
     resetForm(); 
-    getDataFromDb();
     }
     //Form validation using formik package
     const { handleBlur, handleChange, handleSubmit, errors, touched, values, isValid, resetForm } = useFormik({
