@@ -85,7 +85,7 @@ function Login() {
                     manager@gmail.com<br />
                     admin@gmail.com<br />
                 </div>
-                <LockOpenIcon fontSize="small" />Password!123
+                <LockOpenIcon fontSize="small" />Password:admin123
             </small>
         </div>
     )

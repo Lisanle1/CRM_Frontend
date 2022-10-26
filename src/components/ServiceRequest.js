@@ -26,7 +26,7 @@ function ServiceRequest() {
         let decodedToken = jwt.decode(localToken)               //decoding the token
         decodedRef.current = decodedToken.existUser.role
         if (decodedToken.exp * 1000 <= Date.now()) {
-            return navigate("/login")
+            return navigate("/")
         }
         else {
             setCheckRoles(decodedRef.current)
@@ -78,7 +78,7 @@ function ServiceRequest() {
     const changeStatusHandler = async () => {
         const decodedToken =jwt.decode(localStorage.getItem("token"));
         if(decodedToken.exp * 1000 < Date.now()){
-            navigate("/login")
+            navigate("/")
         }
         else{          
             await axios.put(`${API_URL}/service-requests/`+passId,
