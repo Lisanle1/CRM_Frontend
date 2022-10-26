@@ -26,6 +26,7 @@ function AddLeads({ getDataFromDb}) {
             }   
     });
     resetForm(); 
+    getDataFromDb();
     }
     //Form validation using formik package
     const { handleBlur, handleChange, handleSubmit, errors, touched, values, isValid, resetForm } = useFormik({
