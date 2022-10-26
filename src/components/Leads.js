@@ -26,7 +26,7 @@ function Leads() {
         let decodedToken = jwt.decode(localToken)
         decodedRef.current = decodedToken.existUser.role    //assigning user role in a useRef hook
         if (decodedToken.exp * 1000 <= Date.now()) {
-            return navigate("/login")
+            return navigate("/")
         }
         else {
             refToken.current = localToken;
@@ -77,7 +77,7 @@ function Leads() {
     const changeStatusHandler = async () => {
         const decodedToken =jwt.decode(localStorage.getItem("token"));
         if(decodedToken.exp * 1000 < Date.now()){
-            navigate("/login")
+            navigate("/")
         }
         else{
             
@@ -108,7 +108,7 @@ function Leads() {
 
             {addLead ?
                 <div className="leads-page">
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -117,29 +117,27 @@ function Leads() {
                                 <th scope="col">Contact</th>
                                 <th scope="col">Company</th>
                                 <th scope="col">Status</th>
-                                {checkRoles === "" || checkRoles === "Employee" ? "" : <th scope="col">Option</th>}
+                                {checkRoles === "" || checkRoles==="Employee"?null:<th scope="col">Option</th>}
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 data.map((e,i) => {
-                                    return <tr key={i}>
-                                        <th scope="row">{i+ 1}</th>
+                                    return (<tr key={i}>
+                                        <th scope="row">{i+1}</th>
                                         <td>{e.name}</td>
                                         <td>{e.email}</td>
                                         <td>{e.contact}</td>
                                         <td>{e.company}</td>
                                         <td>
-                                            <div className="role-edit-button" onClick={checkRoles === "" ? "" : (() => handleStatusModal(e.status, e._id))}>
-                                                <i class="fas fa-user-edit">{e.status === "" ? "unassigned" : e.status}</i>
+                                            <div className="role-edit-button" onClick={checkRoles==="" ?null:(()=>handleStatusModal(e.status, e._id))}>
+                                                <i className="fas fa-user-edit">{e.status === "" ? "unassigned" : e.status}</i>
                                             </div>
                                         </td>
-                                        {checkRoles === "" || checkRoles === "Employee" ?
-                                            "" :
-                                            <td>
+                                        {checkRoles==="" || checkRoles==="Employee"? null:<td>
                                                 <button className="btn btn-outline-danger" onClick={() => handleDelete(e._id)}>Delete</button>
                                             </td>} 
-                                    </tr>
+                                    </tr>)
                                 })
                             }
                         </tbody>

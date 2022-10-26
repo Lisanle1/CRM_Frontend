@@ -11,32 +11,14 @@ function AddLeads({ getDataFromDb}) {
     const localToken = localStorage.getItem("token");   //getting token from localStorage
     refToken.current = localToken;                      //assigning token in refToken
 
-    // function to create leads
-    // const onSubmit = async (values) => {
-    //     await fetch(`${API_URL}/leads`, {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             token: refToken.current                 //adding token in header to process request
-    //         },
-    //         body: JSON.stringify({
-    //             name: values.name,
-    //             email: values.email,
-    //             contact: values.contact,
-    //             company: values.company,
-    //             status: values.status
-    //         })
-    //     }).then(data => data.json())
-    //     resetForm();                                    // to reset form values after request is done
-    //     getDataFromDb()
-    //  }
+   
     const onSubmit=async(values)=>{
         await axios.post("http://localhost:3001/leads",{
                 name: values.name,
-                    email: values.email,
-                       contact: values.contact,
-                    company: values.company,
-                   status: values.status
+                email: values.email,
+                contact: values.contact,
+                company: values.company,
+                status: values.status
         },
         {
             headers:{
@@ -74,7 +56,7 @@ function AddLeads({ getDataFromDb}) {
                         <input type="text" class="form-control" placeholder="Name" name="name" onChange={handleChange} onBlur={handleBlur} value={values.name} />
                     </div>
                     {touched.name && errors.name ? (<ErrorMessage>{errors.name}</ErrorMessage>) : null}
-                    <div class="form-group">
+                    <div className="form-group">
                         <label htmlFor="email">Email address</label>
                         <input type="email" class="form-control" placeholder="Enter email" name="email" onChange={handleChange} onBlur={handleBlur} value={values.email} />
                     </div>

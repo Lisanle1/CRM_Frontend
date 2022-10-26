@@ -80,8 +80,7 @@ function ServiceRequest() {
         if(decodedToken.exp * 1000 < Date.now()){
             navigate("/login")
         }
-        else{
-            
+        else{          
             await axios.put(`${API_URL}/service-requests/`+passId,
             {
                 status: currentStatus
@@ -103,14 +102,14 @@ function ServiceRequest() {
             {checkRoles === "" ?
                 "" :
                 (addRequest ?
-                    <button className="btn btn-outline-primary leadPage-hidebtn" onClick={handleData}><i class="fas fa-pen"> Create</i></button>
-                    : <button className="btn btn-outline-success leadPage-hidebtn" onClick={handleData2}><i class="far fa-list-alt"> View</i></button>
+                    <button className="btn btn-outline-primary leadPage-hidebtn" onClick={()=>handleData()}><i class="fas fa-pen"> Create</i></button>
+                    : <button className="btn btn-outline-success leadPage-hidebtn" onClick={()=>handleData2()}><i class="far fa-list-alt"> View</i></button>
                 )
             }
 
             {addRequest ?
                 <div className="request-page">
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -118,37 +117,33 @@ function ServiceRequest() {
                                 <th scope="col">Email</th>
                                 <th scope="col">Request</th>
                                 <th scope="col">Status</th>
-                                {checkRoles === "" || checkRoles === "Employee" ? "" : <th scope="col">Option</th>}
+                                {checkRoles==="" || checkRoles==="Employee"?null:<th scope="col">Option</th>}
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                data.map((e, i) => {
-                                    return <tr key={i}>
-                                        <th scope="row">{i + 1}</th>
+                                data.map((e,i) => {
+                                    return (<tr key={i}>
+                                        <th scope="row">{i+1}</th>
                                         <td>{e.name}</td>
                                         <td>{e.email}</td>
                                         <td>{e.request}</td>
                                         <td>
-                                            <div className="role-edit-button" onClick={checkRoles === "" ? "" : (() => handleStatusModal(e.status, e._id))}>
-                                                <i class="fas fa-user-edit">{e.status === "" ? "unassigned" : e.status}</i>
+                                            <div className="role-edit-button" onClick={checkRoles === "" ? null :(() => handleStatusModal(e.status, e._id))}>
+                                                <i className="fas fa-user-edit">{e.status=== ""?"unassigned":e.status}</i>
                                             </div>
                                         </td>
-                                        {checkRoles === "" || checkRoles === "Employee" ?
-                                            "" :
-                                            <td>
+                                        {checkRoles===""||checkRoles==="Employee" ?null:<td>
                                                 <button className="btn btn-outline-danger" onClick={() => handleDelete(e._id)}>Delete</button>
                                             </td>}
-
-                                    </tr>
+                                    </tr>)
                                 })
                             }
                         </tbody>
                     </table>
-                </div>
-                : null}
+                </div>:null}
 
-            {viewRequest ? <AddServiceRequest getDataFromDb={getDataFromDb()} /> : null}
+            {viewRequest ? <AddServiceRequest getDataFromDb={getDataFromDb()} />:null}
 
             <Modal show={show}
                 onHide={() => {

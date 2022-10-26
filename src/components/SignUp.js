@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { ErrorMessage, SuccessMessage } from "./Utils.js"
 import { API_URL } from "./API_URL"
 import image from "../images/image.jpg"
+import axios from 'axios';
 
 function SignUp() {
     const [error, setError] = useState(null)        //hook to error messages from the server
@@ -15,27 +16,23 @@ function SignUp() {
 
     //function to add the user info to database
     const onSubmit = async (values) => {
-        await fetch(`${API_URL}/sign-up`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                password: values.password
-            })
-        })
-            .then(data => data.json())
-            .then(data => {
-                setError(data.message)
-                if (data.message === 'Account created successfully!') {
+        const res=await axios.post(`${API_URL}/sign-up`, {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            password: values.password
+        },
+        {
+        headers: {
+            accesstoken:localStorage.getItem("token")
+        },
+      })
+            setError(res.data.message)
+                if (res.data.message === 'Account created successfully!') {
                     setDisabled(true);                  //trigger disable attribute
                     setShow(true)
                 }
-            }
-            )
+            
     }
 
     //password pattern using regex
@@ -66,9 +63,9 @@ function SignUp() {
     })
 
     return (
-        <div class="wrapper">
-            <div class="logo"> <img src={image} alt="" /> </div>
-            <div class="text-center mt-4 name"> SIGN UP </div>
+        <div className="wrapper">
+            <div className="logo"> <img src={image} alt="" /> </div>
+            <div className="text-center mt-4 name"> SIGN UP </div>
             <form onSubmit={handleSubmit}>
                 <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '34ch', maxWidth: '90%' }, }} noValidate autoComplete="off" >
                     <div >
@@ -89,12 +86,12 @@ function SignUp() {
                     </div>
                 </Box>
                 {error ? (error === "Account created successfully!" ? <SuccessMessage>{error} </SuccessMessage> : <ErrorMessage>{error} </ErrorMessage>) : ""}
-                <button type="submit" disabled={!isValid || disabled} class="btn mt-3" >SIGN UP</button>
+                <button type="submit" disabled={!isValid || disabled} className="btn mt-3" >SIGN UP</button>
             </form><br />
 
-            <div class="text-center mt-2">
+            <div className="text-center mt-2">
                 {show ? ("Sign in to your account: ") : ("Already have an account? ")}
-                <Link to="/login" >Sign in</Link>
+                <Link to="/" >Sign in</Link>
             </div>
 
         </div>

@@ -11,7 +11,7 @@ function LogOut() {
         <>
             <li>
                 <a onClick={setModelOpen}>
-                    <i class="fa fa-sign-out-alt" aria-hidden="true"></i><span className="sidebar-titles">Log Out</span>
+                    <i className="fa fa-sign-out-alt" aria-hidden="true"></i><span className="sidebar-titles">Log Out</span>
                 </a>
             </li>
             <Modal show={modelOpen} onHide={() => setModelOpen(false)}>
@@ -28,13 +28,13 @@ function LogOut() {
                     </Button>
                     <Button variant="primary" onClick={() => {
                         localStorage.removeItem('token');
-                        navigate("/login")
+                        navigate("/")
                         setModelOpen(false)
                     }}>
                         YES
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> 
         </>
     )
 }

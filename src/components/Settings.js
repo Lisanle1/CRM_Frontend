@@ -20,7 +20,7 @@ export default function Settings() {
         const localToken = localStorage.getItem("token")
         let decodedToken = jwt.decode(localToken)           //decoding the token
         if (decodedToken.exp * 1000 <= Date.now()) {
-            return navigate("/login")
+            return navigate("/")
         }
         refToken.current = localToken;                      //assigning token in a useRef hook
         getDataFromDb()
@@ -28,14 +28,13 @@ export default function Settings() {
 
     //function to get data from database
     const getDataFromDb = async () => {
-        await fetch(`${API_URL}/users`, {
-            method: "GET",
+        const res=await axios.get(`${API_URL}/users`, {
             headers: {
-                token: refToken.current
+                accesstoken:localStorage.getItem("token")
             }
-        }).then(data => data.json()).then(data => setData(data))
+        })
+        setData(res.data)
     }
-
     //to display the role modal
     const handleRoleModal = (role, id) => {
         setCurrentRole(role)
@@ -45,33 +44,41 @@ export default function Settings() {
 
     //function to update the user role on database
     const changeRoleHandler = async () => {
-        await axios.put(`${API_URL}/users/` + passId,
+        const decodedToken =jwt.decode(localStorage.getItem("token"));
+        if(decodedToken.exp * 1000 < Date.now()){
+            navigate("/")
+        }
+        else{         
+            await axios.put(`${API_URL}/users/`+passId,
             {
                 role: currentRole
             },
             {
-                headers: {
-                    token: refToken.current
+            headers: {
+                accesstoken:localStorage.getItem("token")
+                    },
+                    
+            });
+            getDataFromDb();
+            setShow(false)
+        }
+    }
+    //function to delete user on database
+    let handleDelete=async(id)=>{
+        await axios.delete(`${API_URL}/users/` + id,
+        {
+                headers:{
+                    accesstoken:localStorage.getItem("token")
                 }
             })
-        getDataFromDb()
-        setShow(false)
-    }
-
-    //function to delete user on database
-    const handleDelete = async (id) => {
-        await axios.delete(`${API_URL}/users/` + id, {
-            headers: {
-                token: refToken.current
-            }
-        })
-        getDataFromDb()
-    }
+            getDataFromDb();
+        }
+    
 
     return <>
         <SideBar />
         <div className="request-page">
-            <table class="table table-striped">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -84,24 +91,20 @@ export default function Settings() {
                 </thead>
                 <tbody>
                     {
-                        data.map((e, i) => {
-                            return <tr key={i}>
-                                <th scope="row">{i + 1}</th>
+                        data.map((e,i) => {
+                            return (<tr key={i}>
+                                <th scope="row">{i+1}</th>
                                 <td>{e.firstName}</td>
                                 <td>{e.lastName}</td>
                                 <td>{e.email}</td>
                                 <td>
                                     <div className="role-edit-button" onClick={() => handleRoleModal(e.role, e._id)}>
-                                        <i class="fas fa-user-edit">{e.role === "" ? "unassigned" : e.role} </i>
-                                    </div>
-                                </td>
+                                        <i className="fas fa-user-edit">{e.role===""?"unassigned":e.role}</i>
+                                    </div></td>
                                 <td>
                                     <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(e._id)}>Delete</button>
                                 </td>
-
-                            </tr>
-                        })
-                    }
+                            </tr>)})}
                 </tbody>
             </table>
         </div>

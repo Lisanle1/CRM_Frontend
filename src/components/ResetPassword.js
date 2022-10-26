@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { ErrorMessage, SuccessMessage } from "./Utils.js"
 import { API_URL } from "./API_URL"
 import image from "../images/image.jpg"
+import axios from 'axios';
 
 function ResetPassword() {
     const [error, setError] = useState(null)        //hook to handle error messages from the server
@@ -16,25 +17,22 @@ function ResetPassword() {
 
     //function to update the password
     const onSubmit = async (values) => {
-        await fetch(`${API_URL}/reset-password`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                newPassword: values.newPassword,
-                resetLink: id                           //passing token as reset link to server
-            })
+        const res=await axios.put(`${API_URL}/reset-password`, {
+            newPassword: values.newPassword,
+            resetLink: id                           //passing token as reset link to server
+        },{
+
+        headers: {
+            accesstoken:localStorage.getItem("token")
+        },
         })
-            .then(data => data.json())
-            .then(data => {
-                setError(data.message)                              //setting error message from the database to UI
-                if (data.message === 'Your password has been changed successfully!') {
+                setError(res.data.message)                              //setting error message from the database to UI
+                if (res.data.message === 'Your password has been changed successfully!') {
                     setDisabled(true);                  //trigger disable attribute
                     setShow(true)                       //display the sign in button after success message
                 }
-            })
-    }
+            }
+    
 
     //password pattern using regex
     const PASSWORD_REGEX = /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/
@@ -58,9 +56,9 @@ function ResetPassword() {
     })
 
     return (
-        <div class="wrapper">
-            <div class="logo"> <img src={image} alt="" /> </div>
-            <div class="text-center mt-4 name"> Reset Password </div>
+        <div className="wrapper">
+            <div className="logo"> <img src={image} alt="" /> </div>
+            <div className="text-center mt-4 name"> Reset Password </div>
             <form onSubmit={handleSubmit}>
                 {error ?
                     (error === "Your password has been changed successfully!" ?
@@ -77,7 +75,7 @@ function ResetPassword() {
 
                     </div>
                 </Box>
-                <button type="submit" disabled={!isValid || disabled} class="btn mt-3" >Reset</button>
+                <button type="submit" disabled={!isValid || disabled} className="btn mt-3" >Reset</button>
             </form><br />
             {show ? <div>Sign in to your account: <Link to='/login'>Sign In</Link></div> : ""}
         </div>

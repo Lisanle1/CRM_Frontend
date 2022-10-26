@@ -9,6 +9,7 @@ import { API_URL } from "./API_URL"
 import image from "../images/image.jpg"
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import MailIcon from '@mui/icons-material/Mail';
+import axios from 'axios';
 
 function Login() {
     let navigate = useNavigate();               //hook to changing the routes
@@ -37,23 +38,16 @@ function Login() {
 
     //function to check credentials is on the database
     const onSubmit = async (values) => {
-        await fetch(`${API_URL}/login`, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        const res=await axios.post(`${API_URL}/login`, {
                 email: values.email,
                 password: values.password
-            })
-        }).then(data => data.json())
-            .then(data => {
-                setError(data.message)
-                if (data.message === "Success") {
-                    localStorage.setItem('token', data.token);
+        
+            });
+                setError(res.data.message)
+                if (res.data.message === "Success") {
+                    localStorage.setItem('token', res.data.token);
                     return navigate('/dashboard')
                 }
-
-            })
-
     }
 
     //Form validation using Formik package
@@ -65,9 +59,9 @@ function Login() {
 
 
     return (
-        <div class="wrapper">
-            <div class="logo"> <img src={image} alt="" /> </div>
-            <div class="text-center mt-4 name"> CRM </div>
+        <div className="wrapper">
+            <div className="logo"> <img src={image} alt="" /> </div>
+            <div className="text-center mt-4 name"> CRM </div>
             <form onSubmit={handleSubmit}>
                 <Box sx={{ '& .MuiTextField-root': { m: 1, width: '34ch', maxWidth: '90%' }, }}>
                     {error ? (<ErrorMessage>{error} </ErrorMessage>) : ""}
@@ -77,12 +71,12 @@ function Login() {
                         <TextField type="password" id="password" name="password" label="Password" variant="standard" value={values.password} onChange={handleChange} onBlur={handleBlur} />
                         <ErrorMessage>{errors.password && touched.password && errors.password}</ErrorMessage>
 
-                        <button type="submit" disabled={!isValid} class="btn mt-3" >Login</button>
+                        <button type="submit" disabled={!isValid} className="btn mt-3" >Login</button>
                     </div>
                 </Box>
             </form>
-            <div class="text-center mt-2"> <Link to="/forgot-password">Forgot password?</Link></div>
-            <div class="text-center mt-2"> <Link to="/sign-up">Sign Up </Link></div>
+            <div className="text-center mt-2"> <Link to="/forgot-password">Forgot password?</Link></div>
+            <div className="text-center mt-2"> <Link to="/sign-up">Sign Up </Link></div>
             <small style={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: "10px", color: "#039BE5", flexWrap: "wrap", flexDirection: "column" }}>
                 Demo Credentials:&nbsp;
                 <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: "3px", flexDirection: "column" }}>

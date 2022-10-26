@@ -25,36 +25,36 @@ function SideBar() {
 
     return (
         <>
-            <div class="sidebar-container">
-                <div class="sidebar-logo">
+            <div className="sidebar-container">
+                <div className="sidebar-logo">
                     <img className="logo-img" src={image} alt="logo" />
                     <span className="ms-3 sidebar-titles">CRM</span>
                 </div>
-                <ul class="sidebar-navigation">
+                <ul className="sidebar-navigation">
 
                     <li>
                         <Link to="/dashboard">
 
-                            <i class="fa fa-list" aria-hidden="true"></i> <span className="sidebar-titles"> &nbsp;&nbsp;Dashboard</span>
+                            <i className="fa fa-list" aria-hidden="true"></i> <span className="sidebar-titles"> &nbsp;&nbsp;Dashboard</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="/leads">
 
-                            <i class="fa fa-users" aria-hidden="true"></i><span className="sidebar-titles">Leads</span>
+                            <i className="fa fa-users" aria-hidden="true"></i><span className="sidebar-titles">Leads</span>
                         </Link>
                     </li>
                     <li>
                         <Link to="/service-requests">
 
-                            <i class="fa fa-edit" aria-hidden="true"></i><span className="sidebar-titles">Service Requests</span>
+                            <i className="fa fa-edit" aria-hidden="true"></i><span className="sidebar-titles">Service Requests</span>
                         </Link>
                     </li>
                     {showUserPage ?
                         <li>
                             <Link to="/users">
 
-                                <i class="fa fa-users" aria-hidden="true"></i><span className="sidebar-titles">Users</span>
+                                <i className="fa fa-users" aria-hidden="true"></i><span className="sidebar-titles">Users</span>
                             </Link>
                         </li>
                         : null
@@ -63,7 +63,7 @@ function SideBar() {
                         <li>
                             <Link to="/settings">
 
-                                <i class="fas fa-users-cog" aria-hidden="true"></i><span className="sidebar-titles">&nbsp;&nbsp;Settings</span>
+                                <i className="fas fa-users-cog" aria-hidden="true"></i><span className="sidebar-titles">&nbsp;&nbsp;Settings</span>
                             </Link>
                         </li>
                         : null

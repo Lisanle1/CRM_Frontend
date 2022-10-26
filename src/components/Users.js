@@ -21,7 +21,7 @@ export default function Users() {
         const localToken = localStorage.getItem("token")
         let decodedToken = jwt.decode(localToken) //decoding the token
         if (decodedToken.exp * 1000 <= Date.now()) {
-            return navigate("/login")
+            return navigate("/")
         } else {
             decodedRef.current = decodedToken.existUser.role //assigning user role
             refToken.current = localToken; //assigning token in a useRef hook
@@ -31,12 +31,12 @@ export default function Users() {
 
     //function to get data from database
     const getDataFromDb = async () => {
-        await fetch(`${API_URL}/users`, {
-            method: "GET",
+        const res=await axios.get(`${API_URL}/users`, {
             headers: {
-                token: refToken.current //adding token in header to process request
+                accesstoken:localStorage.getItem("token")
             }
-        }).then(data => data.json()).then(data => setData(data))
+        })
+        setData(res.data)
     }
 
     //to display the role modal
@@ -48,20 +48,30 @@ export default function Users() {
 
     //function to change role on database
     const changeRoleHandler = async () => {
-        await axios.put(`${API_URL}/users/` + passId, {
-            role: currentRole
-        }, {
+        const decodedToken =jwt.decode(localStorage.getItem("token"));
+        if(decodedToken.exp * 1000 < Date.now()){
+            navigate("/")
+        }
+        else{
+            
+            await axios.put(`${API_URL}/users/`+passId,
+            {
+                role: currentRole
+            },
+            {
             headers: {
-                token: refToken.current //adding token in header to process request
-            }
-        })
-        getDataFromDb()
-        setShow(false)
+                accesstoken:localStorage.getItem("token")
+                    },
+                    
+            });
+            getDataFromDb();
+            setShow(false)
+        }
     }
     return <>
         <SideBar />
         <div className="request-page">
-            <table class="table table-striped">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -73,21 +83,18 @@ export default function Users() {
                 </thead>
                 <tbody>
                     {
-                        data.map((e, i) => {
-                            if (e.role === 'Admin' || e.role === 'Manager') return null;
-                            return <tr key={i}>
-                                <th scope="row">{i + 1}</th>
+                        data.map((e,i) => {
+                            if (e.role==='Admin'||e.role==='Manager') return null;
+                                return (<tr key={i}>
+                                <th scope="row">{i+1}</th>
                                 <td>{e.firstName}</td>
                                 <td>{e.lastName}</td>
                                 <td>{e.email}</td>
                                 <td>
                                     <div className="role-edit-button" onClick={() => handleRoleModal(e.role, e._id)}>
-                                        <i class="fas fa-user-edit">{e.role === "" ? "unassigned" : e.role}</i>
-                                    </div>
-                                </td>
-                            </tr>
-                        })
-                    }
+                                        <i className="fas fa-user-edit">{e.role==="" ?"unassigned":e.role}</i>
+                                    </div></td>
+                                </tr>)})}
                 </tbody>
             </table>
         </div>
